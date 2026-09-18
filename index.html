@@ -1,750 +1,147 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en" data-theme="dark">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Color Playground</title>
-<style>
-  :root {
-    --bg: #16121C;
-    --panel: #1F1726;
-    --border: #332B40;
-    --text: #F4F2F7;
-    --text-muted: #B8B1C7;
-    --accent: #E05AA6;
-    --ok: #4ADE80;
-    --err: #F87171;
-  }
-
-  * { box-sizing: border-box; }
-
-  body {
-    margin: 0;
-    font-family: 'Courier New', monospace;
-    background: var(--bg);
-    color: var(--text);
-    padding: 32px;
-    min-height: 100vh;
-  }
-
-  .wrapper {
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-
-  header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 24px;
-  }
-
-  header h1 {
-    font-size: 15px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin: 0;
-  }
-
-  .mode-toggle {
-    display: flex;
-    gap: 8px;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 4px;
-  }
-
-  .mode-toggle button {
-    background: transparent;
-    border: none;
-    color: var(--text-muted);
-    padding: 6px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-family: inherit;
-    font-size: 13px;
-  }
-
-  .mode-toggle button.active {
-    background: var(--border);
-    color: var(--text);
-  }
-
-  .grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-  }
-
-  @media (max-width: 800px) {
-    .grid { grid-template-columns: 1fr; }
-  }
-
-  .panel {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 20px;
-  }
-
-  .row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 14px;
-  }
-
-  .row label {
-    width: 100px;
-    font-size: 13px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  .row input[type="color"] {
-    width: 36px;
-    height: 30px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    background: none;
-    cursor: pointer;
-    padding: 0;
-  }
-
-  .row input[type="text"] {
-    flex: 1;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 6px 10px;
-    border-radius: 6px;
-    font-family: inherit;
-    font-size: 13px;
-  }
-
-  .row input[type="text"].invalid {
-    border-color: var(--err);
-    color: var(--err);
-  }
-
-  .divider {
-    border-top: 1px solid var(--border);
-    margin: 20px 0;
-  }
-
-  .preview-panel {
-    border-radius: 10px;
-    padding: 24px;
-    transition: background 0.15s ease;
-  }
-
-  .preview-title {
-    font-size: 15px;
-    font-weight: bold;
-    margin: 0 0 16px;
-  }
-
-  .preview-card {
-    border-radius: 10px;
-    padding: 18px;
-    border: 1px solid;
-  }
-
-  .preview-card p {
-    margin: 0 0 6px;
-    font-size: 14px;
-  }
-
-  .preview-card .muted {
-    font-size: 12px;
-    margin-bottom: 16px;
-  }
-
-  .preview-btn {
-    border-radius: 8px;
-    padding: 9px 18px;
-    font-size: 13px;
-    font-family: inherit;
-    cursor: pointer;
-    border: none;
-  }
-
-  .preview-btn.secondary {
-    background: transparent;
-    border: 1px solid;
-    margin-left: 8px;
-  }
-
-  .preview-block {
-    margin-top: 16px;
-    border-radius: 8px;
-    padding: 12px 14px;
-    font-size: 12px;
-  }
-
-  .status-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 16px;
-  }
-
-  .status-badge {
-    font-size: 11px;
-    font-weight: bold;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    padding: 5px 10px;
-    border-radius: 999px;
-  }
-
-  .actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-  }
-
-  .actions button {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 8px 14px;
-    border-radius: 6px;
-    font-family: inherit;
-    font-size: 13px;
-    cursor: pointer;
-  }
-
-  .actions button:hover {
-    border-color: var(--accent);
-  }
-
-  .bulk-box label {
-    display: block;
-    font-size: 12px;
-    color: var(--text-muted);
-    margin-bottom: 8px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  .bulk-box label code {
-    text-transform: none;
-    letter-spacing: 0;
-    background: var(--bg);
-    padding: 1px 5px;
-    border-radius: 4px;
-  }
-
-  #bulkInput {
-    width: 100%;
-    height: 150px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    color: var(--text);
-    font-family: 'Courier New', monospace;
-    font-size: 12px;
-    padding: 10px;
-    border-radius: 6px;
-    resize: vertical;
-  }
-
-  .bulk-actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-top: 10px;
-  }
-
-  .bulk-actions button {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 8px 14px;
-    border-radius: 6px;
-    font-family: inherit;
-    font-size: 13px;
-    cursor: pointer;
-  }
-
-  .bulk-actions button:hover {
-    border-color: var(--accent);
-  }
-
-  #bulkStatus {
-    font-size: 12px;
-    color: var(--text-muted);
-  }
-
-  #bulkStatus.ok { color: var(--ok); }
-  #bulkStatus.err { color: var(--err); }
-
-  .section-title {
-    font-size: 13px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin: 40px 0 16px;
-  }
-
-  #quickInput {
-    width: 100%;
-    height: 220px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    color: var(--text);
-    font-family: 'Courier New', monospace;
-    font-size: 13px;
-    padding: 10px;
-    border-radius: 6px;
-    resize: vertical;
-  }
-
-  #quickStatus {
-    font-size: 12px;
-    color: var(--text-muted);
-    margin-top: 10px;
-    display: block;
-  }
-
-  #quickStatus.err { color: var(--err); }
-
-  .swatch-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .swatch-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 12px;
-  }
-
-  .swatch-color {
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    flex-shrink: 0;
-  }
-
-  .swatch-info {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .swatch-index {
-    font-size: 11px;
-    color: var(--text-muted);
-  }
-
-  .swatch-hex {
-    font-size: 14px;
-  }
-
-  .swatch-empty {
-    font-size: 13px;
-    color: var(--text-muted);
-  }
-
-  textarea#cssOut {
-    width: 100%;
-    height: 140px;
-    margin-top: 12px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    color: var(--text);
-    font-family: 'Courier New', monospace;
-    font-size: 12px;
-    padding: 10px;
-    border-radius: 6px;
-    resize: vertical;
-    display: none;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color Playground</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-
-<div class="wrapper">
-  <header>
-    <h1>Color Playground</h1>
-    <div class="mode-toggle">
-      <button id="lightBtn">Light</button>
-      <button id="darkBtn" class="active">Dark</button>
-    </div>
-  </header>
-
-  <div class="grid">
-    <div class="panel">
-      <div class="bulk-box">
-        <label for="bulkInput">Paste bulk (format: <code>Label #hex</code> per baris)</label>
-        <textarea id="bulkInput" placeholder="Primary      #E05AA6&#10;Secondary    #A565D9&#10;Tertiary     #2B1A3D&#10;Background   #16121C&#10;Surface      #1F1726&#10;Text         #F4F2F7&#10;Text Muted   #B8B1C7&#10;Border       #332B40&#10;Success      #4ADE80&#10;Danger       #F87171&#10;Warning      #FBBF24&#10;Info         #60A5FA"></textarea>
-        <div class="bulk-actions">
-          <button id="applyBulkBtn">Terapkan</button>
-          <span id="bulkStatus"></span>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="logo">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+          <path d="M2 12h20"></path>
+          <circle cx="12" cy="12" r="10"></circle>
+        </svg>
+        <div>
+          <h1>Color Playground</h1>
+          <p>Design and preview color palettes in real-time</p>
         </div>
       </div>
-      <div class="divider"></div>
-      <div id="controls"></div>
-      <div class="divider"></div>
-      <div class="actions">
-        <button id="exportBtn">Export CSS variables</button>
-        <button id="resetBtn">Reset ke default</button>
+      <div class="theme-toggle">
+        <button id="lightBtn" class="toggle-btn" aria-label="Light Mode">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          Light
+        </button>
+        <button id="darkBtn" class="toggle-btn active" aria-label="Dark Mode">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          Dark
+        </button>
       </div>
-      <textarea id="cssOut" readonly></textarea>
-    </div>
+    </header>
 
-    <div class="panel">
-      <div id="preview" class="preview-panel">
-        <p class="preview-title" id="pvTitle">Sample Website</p>
-        <div class="preview-card" id="pvCard">
-          <p id="pvWelcome">Welcome back 👋</p>
-          <p class="muted" id="pvSub">Here's what's happening today.</p>
-          <button class="preview-btn" id="pvBtnPrimary">Primary button</button>
-          <button class="preview-btn secondary" id="pvBtnSecondary">Secondary</button>
-          <div class="preview-block" id="pvBlock">Tertiary highlight block — cocok buat badge, tag, atau alert ringan.</div>
-          <div class="status-row" id="pvStatusRow">
-            <span class="status-badge" id="pvSuccess">Success</span>
-            <span class="status-badge" id="pvDanger">Danger</span>
-            <span class="status-badge" id="pvWarning">Warning</span>
-            <span class="status-badge" id="pvInfo">Info</span>
+    <main class="main-layout">
+      <!-- Left Column: Controls -->
+      <div class="controls-col">
+        <section class="panel">
+          <div class="panel-header">
+            <h2>Palette Colors</h2>
+            <div class="panel-actions">
+              <button id="resetBtn" class="btn btn-ghost btn-sm">Reset</button>
+              <button id="exportBtn" class="btn btn-primary btn-sm">Export CSS</button>
+            </div>
           </div>
-        </div>
+          <div id="controls" class="color-list">
+            <!-- JS populated -->
+          </div>
+          <textarea id="cssOut" class="code-output" readonly></textarea>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Bulk Input</h2>
+              <p class="subtitle">Format: <code>Label #hex</code></p>
+            </div>
+          </div>
+          <textarea id="bulkInput" class="input-textarea" placeholder="Primary      #E05AA6&#10;Secondary    #A565D9&#10;Tertiary     #2B1A3D&#10;Background   #16121C&#10;Surface      #1F1726&#10;Text         #F4F2F7&#10;Text Muted   #B8B1C7&#10;Border       #332B40&#10;Success      #4ADE80&#10;Danger       #F87171&#10;Warning      #FBBF24&#10;Info         #60A5FA"></textarea>
+          <div class="actions-row">
+            <button id="applyBulkBtn" class="btn btn-secondary btn-md">Apply Colors</button>
+            <span id="bulkStatus" class="status-msg"></span>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Quick Color Preview</h2>
+              <p class="subtitle">Paste hex codes, one per line</p>
+            </div>
+          </div>
+          <div class="quick-layout">
+            <div class="quick-input-col">
+              <textarea id="quickInput" class="input-textarea sm" placeholder="#D96C75&#10;#D98A5B&#10;#D4AF55"></textarea>
+              <div style="margin-top: 8px;">
+                <span id="quickStatus" class="status-msg"></span>
+              </div>
+            </div>
+            <div class="quick-preview-col">
+              <div id="quickSwatchList" class="swatch-list">
+                <p class="empty-state">No colors yet.</p>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
-    </div>
-  </div>
 
-  <h2 class="section-title">Quick Color Preview</h2>
-  <div class="grid">
-    <div class="panel">
-      <textarea id="quickInput" placeholder="#D96C75&#10;#D98A5B&#10;#D4AF55"></textarea>
-      <span id="quickStatus"></span>
-    </div>
-    <div class="panel">
-      <div id="quickSwatchList" class="swatch-list">
-        <p class="swatch-empty">Belum ada warna. Masukin hex code di kiri, satu baris satu warna.</p>
+      <!-- Right Column: Live Preview -->
+      <div class="preview-col">
+        <section class="panel preview-panel-wrapper">
+          <div class="panel-header">
+            <h2>Live Preview</h2>
+          </div>
+          <div id="preview" class="live-preview-container">
+            <div class="mock-ui">
+              <aside class="mock-sidebar">
+                <div class="mock-logo"></div>
+                <nav class="mock-nav">
+                  <div class="mock-nav-item active"></div>
+                  <div class="mock-nav-item"></div>
+                  <div class="mock-nav-item"></div>
+                </nav>
+              </aside>
+              <main class="mock-content">
+                <header class="mock-header">
+                  <h3 id="pvTitle">Dashboard</h3>
+                  <div class="mock-avatar"></div>
+                </header>
+                <div class="mock-body">
+                  <div class="mock-hero" id="pvCard">
+                    <h1 id="pvWelcome">Welcome back 👋</h1>
+                    <p class="muted" id="pvSub">Here's what's happening today.</p>
+                    <div class="mock-actions">
+                      <button class="mock-btn-primary" id="pvBtnPrimary">Primary Action</button>
+                      <button class="mock-btn-secondary" id="pvBtnSecondary">Secondary</button>
+                    </div>
+                  </div>
+                  
+                  <div class="mock-grid">
+                    <div class="mock-block" id="pvBlock">
+                      <h4>Highlight Block</h4>
+                      <p>Great for alerts, subtle highlights, or tags.</p>
+                    </div>
+                    <div class="mock-stats">
+                      <div class="status-row" id="pvStatusRow">
+                        <span class="status-badge success" id="pvSuccess">Success</span>
+                        <span class="status-badge danger" id="pvDanger">Danger</span>
+                        <span class="status-badge warning" id="pvWarning">Warning</span>
+                        <span class="status-badge info" id="pvInfo">Info</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </main>
+            </div>
+          </div>
+        </section>
       </div>
-    </div>
+    </main>
   </div>
-</div>
-
-<script>
-  // Palet default, sesuai skema di gambar referensi
-  const defaults = {
-    light: {
-      primary:   '#E05AA6',
-      secondary: '#A565D9',
-      tertiary:  '#F3E8FB',
-      background:'#FBF7FC',
-      surface:   '#FFFFFF',
-      text:      '#241628',
-      textMuted: '#6B6178',
-      border:    '#E4DCEB',
-      success:   '#16A34A',
-      danger:    '#DC2626',
-      warning:   '#D97706',
-      info:      '#2563EB'
-    },
-    dark: {
-      primary:   '#E05AA6',
-      secondary: '#A565D9',
-      tertiary:  '#2B1A3D',
-      background:'#16121C',
-      surface:   '#1F1726',
-      text:      '#F4F2F7',
-      textMuted: '#B8B1C7',
-      border:    '#332B40',
-      success:   '#4ADE80',
-      danger:    '#F87171',
-      warning:   '#FBBF24',
-      info:      '#60A5FA'
-    }
-  };
-
-  const labels = {
-    primary: 'Primary',
-    secondary: 'Secondary',
-    tertiary: 'Tertiary',
-    background: 'Background',
-    surface: 'Surface',
-    text: 'Text',
-    textMuted: 'Text muted',
-    border: 'Border',
-    success: 'Success',
-    danger: 'Danger',
-    warning: 'Warning',
-    info: 'Info'
-  };
-
-  let mode = 'dark';
-  let state = { ...defaults[mode] };
-
-  const controls = document.getElementById('controls');
-  const lightBtn = document.getElementById('lightBtn');
-  const darkBtn = document.getElementById('darkBtn');
-
-  function buildControls() {
-    controls.innerHTML = '';
-    Object.keys(labels).forEach(key => {
-      const row = document.createElement('div');
-      row.className = 'row';
-      row.innerHTML = `
-        <label>${labels[key]}</label>
-        <input type="color" value="${state[key]}" data-key="${key}" />
-        <input type="text" value="${state[key]}" maxlength="7" data-key-text="${key}" />
-      `;
-      controls.appendChild(row);
-    });
-  }
-
-  function isValidHex(v) {
-    return /^#[0-9A-Fa-f]{6}$/.test(v);
-  }
-
-  function renderPreview() {
-    const p = document.getElementById('preview');
-    p.style.background = state.background;
-
-    document.getElementById('pvTitle').style.color = state.text;
-
-    const card = document.getElementById('pvCard');
-    card.style.background = state.surface;
-    card.style.borderColor = state.border;
-
-    document.getElementById('pvWelcome').style.color = state.text;
-
-    const sub = document.getElementById('pvSub');
-    sub.style.color = state.textMuted;
-
-    const btnPrimary = document.getElementById('pvBtnPrimary');
-    btnPrimary.style.background = state.primary;
-    btnPrimary.style.color = state.surface;
-
-    const btnSecondary = document.getElementById('pvBtnSecondary');
-    btnSecondary.style.color = state.secondary;
-    btnSecondary.style.borderColor = state.secondary;
-
-    const block = document.getElementById('pvBlock');
-    block.style.background = state.tertiary;
-    block.style.color = state.text;
-
-    const statusMap = {
-      pvSuccess: state.success,
-      pvDanger: state.danger,
-      pvWarning: state.warning,
-      pvInfo: state.info
-    };
-    Object.keys(statusMap).forEach(id => {
-      const el = document.getElementById(id);
-      el.style.background = statusMap[id] + '26'; // ~15% opacity tint as bg
-      el.style.color = statusMap[id];
-    });
-  }
-
-  function handleInput(e) {
-    const target = e.target;
-    const key = target.dataset.key || target.dataset.keyText;
-    if (!key) return;
-
-    if (target.dataset.key) {
-      state[key] = target.value;
-      const twin = controls.querySelector(`[data-key-text="${key}"]`);
-      twin.value = target.value;
-      twin.classList.remove('invalid');
-    } else {
-      const v = target.value;
-      if (isValidHex(v)) {
-        state[key] = v;
-        controls.querySelector(`[data-key="${key}"]`).value = v;
-        target.classList.remove('invalid');
-      } else {
-        target.classList.add('invalid');
-        return;
-      }
-    }
-    renderPreview();
-  }
-
-  controls.addEventListener('input', handleInput);
-
-  function setMode(newMode) {
-    mode = newMode;
-    state = { ...defaults[mode] };
-    lightBtn.classList.toggle('active', mode === 'light');
-    darkBtn.classList.toggle('active', mode === 'dark');
-    buildControls();
-    renderPreview();
-    document.getElementById('cssOut').style.display = 'none';
-  }
-
-  lightBtn.addEventListener('click', () => setMode('light'));
-  darkBtn.addEventListener('click', () => setMode('dark'));
-
-  document.getElementById('resetBtn').addEventListener('click', () => setMode(mode));
-
-  document.getElementById('exportBtn').addEventListener('click', () => {
-    const out = document.getElementById('cssOut');
-    const lines = Object.keys(state).map(key => {
-      const cssVarName = '--color-' + key.replace(/([A-Z])/g, '-$1').toLowerCase();
-      return `  ${cssVarName}: ${state[key]};`;
-    });
-    out.value = `:root {\n${lines.join('\n')}\n}`;
-    out.style.display = 'block';
-    out.focus();
-    out.select();
-  });
-
-  // Bulk paste parsing
-  // Mapping nama label (fleksibel, lowercase, tanpa spasi) ke key state
-  const labelToKey = {};
-  Object.keys(labels).forEach(key => {
-    const normalized = labels[key].toLowerCase().replace(/\s+/g, '');
-    labelToKey[normalized] = key;
-  });
-  // alias tambahan biar lebih toleran
-  labelToKey['textmuted'] = 'textMuted';
-  labelToKey['mutedtext'] = 'textMuted';
-
-  function parseBulkInput(raw) {
-    const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
-    const result = {};
-    const unmatched = [];
-
-    lines.forEach(line => {
-      const hexMatch = line.match(/#[0-9A-Fa-f]{6}\b/);
-      if (!hexMatch) { unmatched.push(line); return; }
-
-      const hex = hexMatch[0];
-      const labelPart = line.slice(0, hexMatch.index).trim();
-      const normalized = labelPart.toLowerCase().replace(/\s+/g, '');
-
-      const key = labelToKey[normalized];
-      if (key) {
-        result[key] = hex.length === 7 ? hex : hex; // already 6-digit incl #
-      } else {
-        unmatched.push(line);
-      }
-    });
-
-    return { result, unmatched };
-  }
-
-  document.getElementById('applyBulkBtn').addEventListener('click', () => {
-    const raw = document.getElementById('bulkInput').value;
-    const statusEl = document.getElementById('bulkStatus');
-
-    if (!raw.trim()) {
-      statusEl.textContent = 'Textarea masih kosong.';
-      statusEl.className = 'err';
-      return;
-    }
-
-    const { result, unmatched } = parseBulkInput(raw);
-    const matchedCount = Object.keys(result).length;
-
-    if (matchedCount === 0) {
-      statusEl.textContent = 'Format tidak dikenali. Cek contoh placeholder ya.';
-      statusEl.className = 'err';
-      return;
-    }
-
-    Object.assign(state, result);
-    buildControls();
-    renderPreview();
-
-    if (unmatched.length > 0) {
-      statusEl.textContent = `${matchedCount} warna diterapkan, ${unmatched.length} baris dilewati (label tidak dikenali).`;
-      statusEl.className = 'err';
-    } else {
-      statusEl.textContent = `${matchedCount} warna berhasil diterapkan ✓`;
-      statusEl.className = 'ok';
-    }
-  });
-
-  // Quick color preview — parse hex-only textarea, render swatches via DOM manipulation
-  const quickInput = document.getElementById('quickInput');
-  const quickStatus = document.getElementById('quickStatus');
-  const quickSwatchList = document.getElementById('quickSwatchList');
-
-  function renderQuickSwatches() {
-    const lines = quickInput.value.split('\n').map(l => l.trim()).filter(Boolean);
-
-    // kosongkan list lama
-    quickSwatchList.innerHTML = '';
-
-    if (lines.length === 0) {
-      const empty = document.createElement('p');
-      empty.className = 'swatch-empty';
-      empty.textContent = 'Belum ada warna. Masukin hex code di kiri, satu baris satu warna.';
-      quickSwatchList.appendChild(empty);
-      quickStatus.textContent = '';
-      quickStatus.className = '';
-      return;
-    }
-
-    let validCount = 0;
-    let invalidCount = 0;
-
-    lines.forEach((line, i) => {
-      const hexMatch = line.match(/^#[0-9A-Fa-f]{6}$/);
-
-      const row = document.createElement('div');
-      row.className = 'swatch-row';
-
-      const colorBox = document.createElement('div');
-      colorBox.className = 'swatch-color';
-
-      const info = document.createElement('div');
-      info.className = 'swatch-info';
-
-      const indexEl = document.createElement('span');
-      indexEl.className = 'swatch-index';
-      indexEl.textContent = `#${i + 1}`;
-
-      const hexEl = document.createElement('span');
-      hexEl.className = 'swatch-hex';
-
-      if (hexMatch) {
-        colorBox.style.background = line;
-        hexEl.textContent = line.toUpperCase();
-        validCount++;
-      } else {
-        colorBox.style.background = 'transparent';
-        colorBox.style.borderColor = 'var(--err)';
-        hexEl.textContent = `"${line}" — tidak valid`;
-        hexEl.style.color = 'var(--err)';
-        invalidCount++;
-      }
-
-      info.appendChild(indexEl);
-      info.appendChild(hexEl);
-      row.appendChild(colorBox);
-      row.appendChild(info);
-      quickSwatchList.appendChild(row);
-    });
-
-    if (invalidCount > 0) {
-      quickStatus.textContent = `${validCount} warna valid, ${invalidCount} baris tidak dikenali.`;
-      quickStatus.className = 'err';
-    } else {
-      quickStatus.textContent = `${validCount} warna dirender ✓`;
-      quickStatus.className = '';
-    }
-  }
-
-  quickInput.addEventListener('input', renderQuickSwatches);
-  renderQuickSwatches();
-
-  // init
-  buildControls();
-  renderPreview();
-</script>
-
+  <script src="script.js"></script>
 </body>
 </html>

@@ -104,7 +104,6 @@ ColorPlayground/
 2. **Update Status:** Ketika pengguna berinteraksi melalui *color picker*, mengetik nilai HEX baru, atau mem-*paste* daftar warna, *event listener* akan mengevaluasi input tersebut.
 3. **Validasi:** JavaScript segera memvalidasi apakah kode warna tersebut adalah format HEX valid. Jika salah, elemen input akan ditandai dengan peringatan (visual warna merah).
 4. **Sinkronisasi Otomatis:** Nilai HEX baru segera ditulis ke dalam *Custom Properties* milik CSS (`--pv-primary`, `--pv-surface`, dsb) di tingkat dokumen (`<html>`).
-5. **UI Reaktif:** Semua elemen di bagian *Live Preview* yang terhubung ke variabel-variabel tersebut otomatis ter-render ulang oleh browser tanpa perlu logika modifikasi DOM per-elemen.
 5. **Generasi Harmoni:** Nilai HEX juga secara asinkron diubah ke HSL untuk menghitung warna harmoni baru menggunakan matematika derajat roda warna.
 6. **UI Reaktif:** Semua elemen terkait merender ulang hasil secara otomatis.
 
@@ -146,7 +145,6 @@ Aplikasi *Color Playground* beroperasi penuh pada lapisan *client-side*. Anda ti
 ## 🗺️ Rencana Pengembangan
 
 Beberapa fitur yang dipertimbangkan (*Future Ideas*):
-- [ ] Generator Skema Harmoni Warna (*Complementary*, *Analogous*, *Triadic*, dll).
 - [ ] Implementasi pemeriksa tingkat kontras teks untuk menyesuaikan pedoman aksesibilitas standar WCAG.
 - [ ] Fitur simpan palet ke penyimpanan internal browser (`Local Storage`) agar status desain tersimpan otomatis.
 - [ ] Pilihan format *export* baru, seperti untuk *Tailwind CSS config* atau berkas *JSON*.

@@ -65,6 +65,7 @@
             <span id="bulkStatus" class="status-msg"></span>
           </div>
         </section>
+
         <section class="panel">
           <div class="panel-header">
             <div>
@@ -72,15 +73,13 @@
               <p class="subtitle">Generate harmonious colors based on a single hue.</p>
             </div>
           </div>
-          
           <div class="harmony-controls">
             <div class="harmony-base-color">
               <div class="color-picker-wrap">
-                <input type="color" id="harmonyBasePicker" value="#3b82f6">
+                <button type="button" class="custom-picker-trigger" id="harmonyBasePicker" data-harmony="true" style="background-color: #3b82f6;" aria-label="Pick base color"></button>
               </div>
-              <input type="text" id="harmonyBaseHex" class="color-hex-input" value="#3B82F6" maxlength="7">
+              <input type="text" id="harmonyBaseHex" class="color-hex-input" value="#3B82F6" maxlength="9" spellcheck="false">
             </div>
-            
             <select id="harmonyType" class="input-select" aria-label="Harmony Type">
               <option value="complementary">Complementary</option>
               <option value="analogous">Analogous</option>
@@ -89,7 +88,6 @@
               <option value="monochromatic">Monochromatic</option>
             </select>
           </div>
-          
           <div id="harmonyResults" class="harmony-results">
             <!-- Populated via JS -->
           </div>
@@ -148,7 +146,6 @@
                       <button class="mock-btn-secondary" id="pvBtnSecondary">Secondary</button>
                     </div>
                   </div>
-                  
                   <div class="mock-grid">
                     <div class="mock-block" id="pvBlock">
                       <h4>Highlight Block</h4>
@@ -171,6 +168,54 @@
       </div>
     </main>
   </div>
+
+  <!-- Custom Color Picker Popup -->
+  <div id="cpPopup" class="cp-popup hidden" role="dialog" aria-label="Color Picker">
+    <div class="cp-col">
+      <span class="cp-title">Picker</span>
+      <div class="cp-sat-area" id="cpSatArea">
+        <div class="cp-sat-white"></div>
+        <div class="cp-sat-black"></div>
+        <div class="cp-sat-thumb" id="cpSatThumb"></div>
+      </div>
+    </div>
+
+    <div class="cp-col cp-col-controls">
+      <div class="cp-hex-block">
+        <span class="cp-title">Hex</span>
+        <div class="cp-hex-row">
+          <div class="cp-preview-checker"><div class="cp-preview-swatch" id="cpPreview"></div></div>
+          <input type="text" id="cpHex" class="cp-hex-input" maxlength="9" spellcheck="false" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="cp-rgba">
+        <div class="cp-rgba-labels">
+          <span class="cp-title">R</span>
+          <span class="cp-title">G</span>
+          <span class="cp-title">B</span>
+          <span class="cp-title">A</span>
+        </div>
+        <div class="cp-rgba-inputs">
+          <input type="number" id="cpR" min="0" max="255">
+          <input type="number" id="cpG" min="0" max="255">
+          <input type="number" id="cpB" min="0" max="255">
+          <input type="number" id="cpA" min="0" max="100">
+        </div>
+      </div>
+
+      <div class="cp-sliders">
+        <div class="cp-track cp-hue-track" id="cpHueTrack">
+          <div class="cp-slider-thumb" id="cpHueThumb"></div>
+        </div>
+        <div class="cp-track cp-alpha-track" id="cpAlphaTrack">
+          <div class="cp-alpha-gradient" id="cpAlphaGrad"></div>
+          <div class="cp-slider-thumb" id="cpAlphaThumb"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>

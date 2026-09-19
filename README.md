@@ -16,6 +16,7 @@ Sebuah *browser-based color utility* minimalis dan modern untuk merancang, memvi
 <div align="center">
   <a href="#-pengenalan">🚀 Pengenalan</a> •
   <a href="#-fitur-utama">✨ Fitur</a> •
+  <a href="#-color-harmony">🌈 Color Harmony</a> •
   <a href="#-desain--ux">🎨 Desain & UX</a> •
   <a href="#-tech-stack">🛠️ Tech Stack</a> •
   <a href="#-menjalankan-secara-lokal">🚀 Getting Started</a>
@@ -46,9 +47,22 @@ Proyek ini menyatukan semua interaksi tersebut ke dalam satu antarmuka yang bers
 | 🎨 **Color Editing** | Sesuaikan warna satu per satu menggunakan *native color picker* atau input teks HEX yang presisi. |
 | 🌓 **Light / Dark Mode** | Ubah tema antarmuka aplikasi dari terang ke gelap untuk kenyamanan mendesain dalam berbagai lingkungan pencahayaan. |
 | 🧩 **Bulk Color Input** | Punya daftar warna? *Paste* format `Label #HEX` (misal: `Primary #E05AA6`) dan terapkan seluruh palet sekaligus. |
+| 🌈 **Color Harmony** | Hasilkan kombinasi palet akurat berbasis matematika warna (seperti *Complementary, Analogous*, dll) hanya dari satu warna dasar. |
 | ⚡ **Quick Color Preview** | Uji daftar kode HEX acak secara cepat untuk memvisualisasikan kumpulan *swatch* warna tanpa memodifikasi palet utama Anda. |
 | 📋 **CSS Export** | Ekspor palet Anda menjadi blok variabel CSS `:root` yang siap di-*copy-paste* ke proyek Anda. |
 | 🔄 **Reset & Validasi** | Kembali ke palet default kapan saja, dilengkapi dengan validasi input HEX yang mencegah kesalahan format. |
+
+## 🌈 Color Harmony
+
+Aplikasi ini mencakup fitur **Color Harmony Generator** bawaan yang dihitung berdasarkan ruang warna HSL untuk memberikan kombinasi palet yang akurat secara teori warna:
+
+- **Complementary:** Warna utama dan warna berseberangannya pada roda warna (terpisah 180°).
+- **Analogous:** Warna utama beserta dua tetangga terdekatnya (±30°).
+- **Triadic:** Tiga warna yang berjarak sama dan seimbang (terpisah 120°).
+- **Split-Complementary:** Warna utama ditambah dua warna yang berdekatan dengan warna komplementernya.
+- **Monochromatic:** Variasi saturasi dan kecerahan dari warna dasar yang sama.
+
+Setiap warna yang dihasilkan menampilkan pratinjau visual dan dapat langsung disalin ke *clipboard* dengan satu klik.
 
 ## 🎨 Desain & UX
 
@@ -91,6 +105,8 @@ ColorPlayground/
 3. **Validasi:** JavaScript segera memvalidasi apakah kode warna tersebut adalah format HEX valid. Jika salah, elemen input akan ditandai dengan peringatan (visual warna merah).
 4. **Sinkronisasi Otomatis:** Nilai HEX baru segera ditulis ke dalam *Custom Properties* milik CSS (`--pv-primary`, `--pv-surface`, dsb) di tingkat dokumen (`<html>`).
 5. **UI Reaktif:** Semua elemen di bagian *Live Preview* yang terhubung ke variabel-variabel tersebut otomatis ter-render ulang oleh browser tanpa perlu logika modifikasi DOM per-elemen.
+5. **Generasi Harmoni:** Nilai HEX juga secara asinkron diubah ke HSL untuk menghitung warna harmoni baru menggunakan matematika derajat roda warna.
+6. **UI Reaktif:** Semua elemen terkait merender ulang hasil secara otomatis.
 
 ## 🚀 Menjalankan Secara Lokal
 
@@ -109,6 +125,7 @@ Tidak perlu `npm install` atau menjalankan *local server* (meskipun *extension* 
 ## 🖱️ Cara Menggunakan
 
 - **Mendesain Palet:** Gunakan panel di sebelah kiri. Klik pada ikon kotak warna untuk membuka palet visual bawaan OS, atau ubah angka langsung pada kolom input teks 6-digit HEX di sebelahnya.
+- **Mencari Harmoni Warna:** Pilih warna dasar di panel **Color Harmony**, pilih mode harmoni dari opsi *dropdown*, lalu klik tombol **Copy** untuk menyalin palet yang di-generate.
 - **Bulk Input:** Coba *copy* daftar teks dengan format `NamaLabel #hex`, rekatkan pada *text-area* **Bulk Input**, dan tekan **Apply Colors**. Semua baris valid akan diaplikasikan otomatis.
 - **Quick Test:** Masukkan deretan angka HEX murni pada panel **Quick Color Preview** (satu baris satu HEX) untuk mengevaluasi warna secara mentah dan cepat, tanpa mengubah *mock UI*.
 - **Melihat Hasil:** Segala interaksi yang valid langsung tampak jelas pada area **Live Preview** sebelah kanan.

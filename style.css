@@ -287,6 +287,101 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monos
 .status-msg.ok { color: var(--app-ok); }
 .status-msg.err { color: var(--app-err); }
 
+/* Color Harmony */
+.harmony-controls {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+@media (max-width: 600px) {
+  .harmony-controls { flex-direction: column; align-items: stretch; }
+}
+
+.harmony-base-color {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--app-bg);
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--app-border);
+}
+
+.input-select {
+  flex: 1;
+  background: var(--app-bg);
+  border: 1px solid var(--app-border);
+  color: var(--app-text);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.input-select:focus {
+  outline: none;
+  border-color: var(--app-accent);
+}
+
+.harmony-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 12px;
+}
+
+.harmony-swatch-card {
+  background: var(--app-bg);
+  border: 1px solid var(--app-border);
+  border-radius: var(--radius-sm);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.2s;
+}
+
+.harmony-swatch-color {
+  width: 100%;
+  height: 48px;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--app-border);
+  box-shadow: var(--shadow-sm);
+  transition: background 0.3s;
+}
+
+.harmony-swatch-hex {
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: var(--app-text);
+  text-align: center;
+}
+
+.btn-copy {
+  background: var(--app-panel);
+  border: 1px solid var(--app-border);
+  color: var(--app-text-muted);
+  border-radius: var(--radius-xs);
+  padding: 4px;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s;
+}
+.btn-copy:hover {
+  background: var(--app-bg);
+  color: var(--app-text);
+  border-color: var(--app-text-muted);
+}
+.btn-copy.copied {
+  background: var(--app-ok);
+  color: white;
+  border-color: var(--app-ok);
+}
+
 /* Quick View */
 .quick-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 @media (max-width: 600px) { .quick-layout { grid-template-columns: 1fr; } }

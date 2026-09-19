@@ -231,6 +231,168 @@ document.getElementById('applyBulkBtn').addEventListener('click', () => {
   }, 4000);
 });
 
+// Color Conversions for Harmony
+function hexToHsl(hex) {
+  hex = hex.replace(/^#/, '');
+  if (hex.length === 3) hex = hex.split('').map(x => x + x).join('');
+  let r = parseInt(hex.substring(0, 2), 16) / 255;
+  let g = parseInt(hex.substring(2, 4), 16) / 255;
+  let b = parseInt(hex.substring(4, 6), 16) / 255;
+  
+  let max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h, s, l = (max + min) / 2;
+
+  if (max === min) {
+    h = s = 0; // achromatic
+  } else {
+    let d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      case b: h = (r - g) / d + 4; break;
+    }
+    h /= 6;
+  }
+  return [h * 360, s * 100, l * 100];
+}
+
+function hslToHex(h, s, l) {
+  h /= 360; s /= 100; l /= 100;
+  let r, g, b;
+  if (s === 0) {
+    r = g = b = l; // achromatic
+  } else {
+    const hue2rgb = (p, q, t) => {
+      if (t < 0) t += 1;
+      if (t > 1) t -= 1;
+      if (t < 1/6) return p + (q - p) * 6 * t;
+      if (t < 1/2) return q;
+      if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+      return p;
+    };
+    let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    let p = 2 * l - q;
+    r = hue2rgb(p, q, h + 1/3);
+    g = hue2rgb(p, q, h);
+    b = hue2rgb(p, q, h - 1/3);
+  }
+  const toHex = x => {
+    const hex = Math.round(x * 255).toString(16);
+    return hex.length === 1 ? '0' + hex : hex;
+  };
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
+}
+
+// Harmony Generator
+const harmonyBasePicker = document.getElementById('harmonyBasePicker');
+const harmonyBaseHex = document.getElementById('harmonyBaseHex');
+const harmonyType = document.getElementById('harmonyType');
+const harmonyResults = document.getElementById('harmonyResults');
+
+function generateHarmony() {
+  if (!harmonyBaseHex) return; // guard if not loaded
+  const hex = harmonyBaseHex.value;
+  if (!isValidHex(hex)) return;
+  
+  const [h, s, l] = hexToHsl(hex);
+  const type = harmonyType.value;
+  let colors = [hex.toUpperCase()]; 
+  
+  const wrap = val => (val + 360) % 360;
+
+  if (type === 'complementary') {
+    colors.push(hslToHex(wrap(h + 180), s, l));
+  } else if (type === 'analogous') {
+    colors = [
+      hslToHex(wrap(h - 30), s, l),
+      hex.toUpperCase(),
+      hslToHex(wrap(h + 30), s, l)
+    ];
+  } else if (type === 'triadic') {
+    colors.push(hslToHex(wrap(h + 120), s, l));
+    colors.push(hslToHex(wrap(h + 240), s, l));
+  } else if (type === 'split-complementary') {
+    colors.push(hslToHex(wrap(h + 150), s, l));
+    colors.push(hslToHex(wrap(h + 210), s, l));
+  } else if (type === 'monochromatic') {
+    colors = [
+      hslToHex(h, s, Math.min(100, l + 30)),
+      hslToHex(h, s, Math.min(100, l + 15)),
+      hex.toUpperCase(),
+      hslToHex(h, s, Math.max(0, l - 15)),
+      hslToHex(h, s, Math.max(0, l - 30))
+    ];
+  }
+
+  renderHarmonyResults(colors);
+}
+
+function renderHarmonyResults(colors) {
+  harmonyResults.innerHTML = '';
+  colors.forEach(color => {
+    const card = document.createElement('div');
+    card.className = 'harmony-swatch-card';
+    
+    const swatch = document.createElement('div');
+    swatch.className = 'harmony-swatch-color';
+    swatch.style.background = color;
+    
+    const hexLabel = document.createElement('span');
+    hexLabel.className = 'harmony-swatch-hex';
+    hexLabel.textContent = color;
+    
+    const btn = document.createElement('button');
+    btn.className = 'btn-copy';
+    btn.textContent = 'Copy';
+    btn.onclick = () => {
+      navigator.clipboard.writeText(color);
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy';
+        btn.classList.remove('copied');
+      }, 1500);
+    };
+    
+    card.appendChild(swatch);
+    card.appendChild(hexLabel);
+    card.appendChild(btn);
+    harmonyResults.appendChild(card);
+  });
+}
+
+function handleHarmonyInput(e) {
+  let v = e.target.value.trim();
+  if (e.target === harmonyBaseHex && !v.startsWith('#') && v.length > 0) {
+    v = '#' + v;
+  }
+  
+  if (e.target === harmonyBaseHex) {
+    if (isValidHex(v)) {
+      harmonyBasePicker.value = v;
+      harmonyBaseHex.value = v.toUpperCase();
+      harmonyBaseHex.classList.remove('invalid');
+      generateHarmony();
+    } else {
+      harmonyBaseHex.classList.add('invalid');
+    }
+  } else if (e.target === harmonyBasePicker) {
+    harmonyBaseHex.value = v.toUpperCase();
+    harmonyBaseHex.classList.remove('invalid');
+    generateHarmony();
+  } else if (e.target === harmonyType) {
+    generateHarmony();
+  }
+}
+
+if (harmonyBasePicker) {
+  harmonyBasePicker.addEventListener('input', handleHarmonyInput);
+  harmonyBaseHex.addEventListener('input', handleHarmonyInput);
+  harmonyType.addEventListener('change', handleHarmonyInput);
+  generateHarmony();
+}
+
 // Quick Color Preview
 const quickInput = document.getElementById('quickInput');
 const quickStatus = document.getElementById('quickStatus');

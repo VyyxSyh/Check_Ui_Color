@@ -65,6 +65,35 @@
             <span id="bulkStatus" class="status-msg"></span>
           </div>
         </section>
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Color Harmony</h2>
+              <p class="subtitle">Generate harmonious colors based on a single hue.</p>
+            </div>
+          </div>
+          
+          <div class="harmony-controls">
+            <div class="harmony-base-color">
+              <div class="color-picker-wrap">
+                <input type="color" id="harmonyBasePicker" value="#3b82f6">
+              </div>
+              <input type="text" id="harmonyBaseHex" class="color-hex-input" value="#3B82F6" maxlength="7">
+            </div>
+            
+            <select id="harmonyType" class="input-select" aria-label="Harmony Type">
+              <option value="complementary">Complementary</option>
+              <option value="analogous">Analogous</option>
+              <option value="triadic">Triadic</option>
+              <option value="split-complementary">Split-Complementary</option>
+              <option value="monochromatic">Monochromatic</option>
+            </select>
+          </div>
+          
+          <div id="harmonyResults" class="harmony-results">
+            <!-- Populated via JS -->
+          </div>
+        </section>
 
         <section class="panel">
           <div class="panel-header">
